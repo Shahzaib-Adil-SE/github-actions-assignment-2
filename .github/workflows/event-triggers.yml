@@ -1,0 +1,17 @@
+name: Module 2A - Event Triggers
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main, dev]
+
+jobs:
+  event-demo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Show event information
+        run: |
+          echo "Event: ${{ github.event_name }}"
+          echo "Branch: ${{ github.ref_name }}"
+          echo "Triggered by: ${{ github.actor }}"
