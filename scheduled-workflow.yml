@@ -1,0 +1,17 @@
+name: Module 2B - Scheduled Cron Workflow
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+
+jobs:
+  scheduled-job:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Print scheduled execution
+        run: echo "Scheduled workflow executed successfully"
+
+      - name: Display current date and time
+        run: date -u
