@@ -1,0 +1,20 @@
+name: Module 2D - Repository Dispatch
+
+on:
+  repository_dispatch:
+    types: [custom-webhook]
+
+jobs:
+  webhook-job:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Display webhook information
+        env:
+          MESSAGE: ${{ github.event.client_payload.message }}
+          STUDENT: ${{ github.event.client_payload.student }}
+        run: |
+          echo "Repository dispatch received!"
+          echo "Event: ${{ github.event.action }}"
+          echo "Message: $MESSAGE"
+          echo "Student: $STUDENT"
