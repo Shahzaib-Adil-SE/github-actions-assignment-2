@@ -1,0 +1,17 @@
+
+name: Custom Greeting Action
+description: A custom JavaScript action for Module 7
+
+inputs:
+  name:
+    description: Name of the person to greet
+    required: true
+    default: Student
+
+outputs:
+  greeting:
+    description: Generated greeting message
+
+runs:
+  using: node20
+  main: dist/index.js
