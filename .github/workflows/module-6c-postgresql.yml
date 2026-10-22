@@ -1,0 +1,62 @@
+
+name: Module 6C - PostgreSQL Service Container
+
+on:
+  workflow_dispatch:
+
+jobs:
+  postgres-demo:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: testuser
+          POSTGRES_PASSWORD: testpassword
+          POSTGRES_DB: assignment_db
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U testuser -d assignment_db"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Install PostgreSQL client
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y postgresql-client
+
+      - name: Verify PostgreSQL connection
+        env:
+          PGPASSWORD: testpassword
+        run: |
+          echo "Checking PostgreSQL connection..."
+          pg_isready -h localhost -p 5432 -U testuser -d assignment_db
+
+      - name: Create table and insert data
+        env:
+          PGPASSWORD: testpassword
+        run: |
+          psql -h localhost -p 5432 -U testuser -d assignment_db <<'SQL'
+          CREATE TABLE students (
+            id SERIAL PRIMARY KEY,
+            name VARCHAR(100),
+            course VARCHAR(100)
+          );
+
+          INSERT INTO students (name, course)
+          VALUES ('Student', 'DevOps Assignment 2');
+
+          SELECT * FROM students;
+          SQL
+
+      - name: Display service container information
+        run: |
+          echo "PostgreSQL Service Container"
+          echo "Host: localhost"
+          echo "Port: 5432"
+          echo "Image: postgres:16"
+          echo "PostgreSQL service test completed successfully"
