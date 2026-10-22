@@ -1,0 +1,38 @@
+
+name: Module 5A - Windows and macOS Runners
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  windows-job:
+    runs-on: windows-latest
+    steps:
+      - name: Display Windows version
+        shell: pwsh
+        run: |
+          Write-Output "Runner OS: $env:RUNNER_OS"
+          Write-Output "Operating System Version:"
+          Get-CimInstance Win32_OperatingSystem |
+            Select-Object Caption, Version, OSArchitecture
+
+      - name: Verify secret masking
+        shell: pwsh
+        env:
+          DEMO_SECRET: ${{ secrets.DEMO_SECRET }}
+        run: |
+          if ([string]::IsNullOrEmpty($env:DEMO_SECRET)) {
+            throw "DEMO_SECRET is missing. Check repository Actions secrets."
+          }
+          Write-Output "Secret masking test:"
+          Write-Output $env:DEMO_SECRET
+
+  macos-job:
+    runs-on: macos-latest
+    steps:
+      - name: Display macOS version
+        run: |
+          echo "Runner OS: $RUNNER_OS"
+          sw_vers
