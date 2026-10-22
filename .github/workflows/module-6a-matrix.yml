@@ -1,0 +1,38 @@
+
+name: Module 6A - Matrix Strategy
+
+on:
+  workflow_dispatch:
+
+jobs:
+  matrix-demo:
+    name: ${{ matrix.os }} - Node ${{ matrix.node }}
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        node: [20, 22]
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: Display Matrix Information
+        shell: bash
+        run: |
+          echo "Operating System: ${{ matrix.os }}"
+          echo "Node.js Version: ${{ matrix.node }}"
+          echo "Runner OS: $RUNNER_OS"
+          node --version
+          npm --version
+
+      - name: Matrix Job Completed
+        shell: bash
+        run: echo "Matrix job completed successfully!"
