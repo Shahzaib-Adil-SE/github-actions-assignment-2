@@ -1,0 +1,14 @@
+
+{
+  "name": "module-7-custom-greeting-action",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Custom JavaScript GitHub Action for Module 7",
+  "main": "index.js",
+  "scripts": {
+    "build": "ncc build index.js -o dist"
+  },
+  "devDependencies": {
+    "@vercel/ncc": "^0.38.3"
+  }
+}
