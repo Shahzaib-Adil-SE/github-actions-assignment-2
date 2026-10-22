@@ -1,0 +1,42 @@
+
+name: Module 6B - Dependency Caching
+
+on:
+  workflow_dispatch:
+
+jobs:
+  caching-demo:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Restore dependency cache
+        id: dependency-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: module6b-npm-cache-v1-${{ runner.os }}
+
+      - name: Display cache status
+        shell: bash
+        env:
+          CACHE_HIT: ${{ steps.dependency-cache.outputs.cache-hit }}
+        run: |
+          if [ "$CACHE_HIT" = "true" ]; then
+            echo "Cache Hit: Cache Restored"
+          else
+            echo "Cache Miss: No existing cache found"
+          fi
+
+      - name: Install demo dependency
+        run: |
+          npm --version
+          npm install --no-save --no-package-lock --prefix /tmp/module6b-demo lodash@4.17.21
+
+      - name: Show cache contents
+        run: |
+          echo "Cached npm directory:"
+          du -sh ~/.npm
+          echo "Cache demonstration completed"
